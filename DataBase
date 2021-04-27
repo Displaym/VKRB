@@ -1,0 +1,85 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace DBSN
+{
+    public class ClDBSN
+    {
+        static string _way;
+        static string _fil_dbn;
+        static string _fil_dbs;
+        public FileStream _dbs;
+        public FileStream _dbn;
+        public ClDBSN(string way, string fil_name)
+        {
+            _way = way;
+            _fil_dbs = fil_name + ".dbs";
+            _fil_dbn = fil_name + ".dbn";
+            _dbs = File.Create(_way + _fil_dbs);
+            _dbn = File.Create(_way + _fil_dbn);
+        }
+
+        //СОЗДАНИЕ ТАБЛИЦЫ ДБСН//
+/*        public static bool createDBSN()
+        {
+            FileStream dbs = File.Create(_fil_dbs);
+            FileStream dbn = File.Create(_fil_dbn);
+            return true;
+        }
+*/
+        //ОТКРЫТЬ ТАБЛИЦУ ДБСН//
+        public void openDBSN()
+        {
+            _dbs = File.Open(_way + _fil_dbs, FileMode.Open, FileAccess.ReadWrite);
+            _dbn = File.Open(_way + _fil_dbn, FileMode.Open, FileAccess.ReadWrite);
+        }
+
+        //ЗАКРЫТЬ ТАБЛИЦУ ДБСН//
+        public void closeDBSN()
+        {
+            _dbn.Close();
+            _dbs.Close();
+        }
+
+        //ЗАПИСЬ В ТАБЛИЦУ ДБСН//
+        public void writeDBSN()
+        {
+            string line = Console.ReadLine();
+            File.WriteAllText(_way + _fil_dbn, line);
+        }
+
+        //ЧТЕНИЕ ИЗ ТАБЛИЦЫ ДБСН//
+        public void readDBSN()
+        {
+
+        }
+
+        //ЧТЕНИЕ В РЕАЛЬНОМ ВРЕМЕНИ//
+        //СМОТРЯЩИЙ ЗА ФАЙЛОМ//
+        public void realtime_readDBSN()
+        {
+            do
+            {
+                FileSystemWatcher watcher = new FileSystemWatcher();
+                watcher.Path = Path.GetDirectoryName(@"" + _way + _fil_dbn);
+                watcher.NotifyFilter = NotifyFilters.Size;
+                watcher.Filter = "*.dbn";
+
+                watcher.Changed += new FileSystemEventHandler(OnChanged);
+
+                watcher.EnableRaisingEvents = true;
+            }
+            while (Console.Read() != 'q');
+        }
+
+        //ОБРАБОТЧИК ИЗМЕНЕНИЙ В ФАЙЛЕ//
+        public void OnChanged(object sender, FileSystemEventArgs e)
+        {
+            Console.WriteLine("File: {0} {1}", e.FullPath, e.ChangeType.ToString());
+        }
+    }
+}
