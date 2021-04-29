@@ -38,11 +38,11 @@ namespace DBSN
             //dbn.Close();
             using (StreamWriter sw = new StreamWriter(_way + name + ".dbs", true))
             {
-                Console.WriteLine("Файл " + name + ".dbs" + "создан");
+                Console.WriteLine("Файл " + name + ".dbs" + " создан или открыт(в случае ошибочного использования)");
             }
             using (StreamWriter sw = new StreamWriter(_way + name + ".dbn", true))
             {
-                Console.WriteLine("Файл " + name + ".dbn" + "создан");
+                Console.WriteLine("Файл " + name + ".dbn" + " создан или открыт(в случае ошибочного использования)");
             }
         }
 
@@ -53,7 +53,9 @@ namespace DBSN
             string fil_name = Console.ReadLine();
             fil_name = _way + fil_name;
             _dbs = File.Open(fil_name + ".dbs", FileMode.Append);
+            Console.WriteLine("Файл " + fil_name + ".dbs" + " открыт");
             _dbn = File.Open(fil_name + ".dbn", FileMode.Append);
+            Console.WriteLine("Файл " + fil_name + ".dbn" + " открыт");
         }
 
         //ЗАКРЫТЬ ТАБЛИЦУ ДБСН//
@@ -72,12 +74,14 @@ namespace DBSN
             using (StreamWriter sw = new StreamWriter(fil_name + ".dbs", true, System.Text.Encoding.UTF8))
             {
                 sw.Write(fragm);
+                Console.WriteLine("Файл " + fil_name + ".dbs" + " дозаписан");
             }
             using (StreamWriter sw = new StreamWriter(fil_name + ".dbn", true, System.Text.Encoding.UTF8))
             {
                 string BinaryFragm_nom = Convert.ToString(fragm_nom, 2);
                 string BinaryFragm_len = Convert.ToString(fragm.Length, 2);
                 sw.WriteLine(BinaryFragm_nom + BinaryFragm_len);
+                Console.WriteLine("Файл " + fil_name + ".dbn" + " дозаписан");
             }
         }
 
