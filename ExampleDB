@@ -8,12 +8,13 @@ namespace ExampleDBSN
     {
         static void Main(string[] args)
         {
-            ClDBSN dbsn = new ClDBSN("D:\\Example\\", "Gleb");
-            dbsn.closeDBSN();
+            ClDBSN dbsn = new ClDBSN("D:\\Example\\");
+            dbsn.createDBSN("Gleb");
             dbsn.openDBSN();
             dbsn.closeDBSN();
-            dbsn.writeDBSN();
-            dbsn.realtime_readDBSN();
+            dbsn.writeDBSN("Привет медвед", 0);
+            dbsn.writeDBSN("Пока медвед", 1);
+            //dbsn.writeDBSN("Проверка", 0);
             Console.ReadLine();
         }
     }
