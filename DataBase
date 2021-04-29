@@ -71,12 +71,12 @@ namespace DBSN
             Console.WriteLine("Какой файл дозаписать:");
             string fil_name = Console.ReadLine();
             fil_name = _way + fil_name;
-            using (StreamWriter sw = new StreamWriter(fil_name + ".dbs", true, System.Text.Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter(fil_name + ".dbs", true, System.Text.Encoding.Default))
             {
                 sw.Write(fragm);
                 Console.WriteLine("Файл " + fil_name + ".dbs" + " дозаписан");
             }
-            using (StreamWriter sw = new StreamWriter(fil_name + ".dbn", true, System.Text.Encoding.UTF8))
+            using (StreamWriter sw = new StreamWriter(fil_name + ".dbn", true, System.Text.Encoding.Default))
             {
                 string BinaryFragm_nom = Convert.ToString(fragm_nom, 2);
                 string BinaryFragm_len = Convert.ToString(fragm.Length, 2);
