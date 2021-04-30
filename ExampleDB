@@ -9,13 +9,13 @@ namespace ExampleDBSN
         static void Main(string[] args)
         {
             ClDBSN dbsn = new ClDBSN("D:\\Example\\");
-            //dbsn.createDBSN("Gleb");
+            //dbsn.createDBSN();
             //dbsn.openDBSN();
             //dbsn.closeDBSN();
-            //dbsn.writeDBSN("Привет медвед", 0);
-            //dbsn.writeDBSN("Пока медвед", 1);
-            //dbsn.writeDBSN("Проверка", 0);
-            dbsn.readDBSN("Gleb", 1);
+            dbsn.writeDBSN("Привет медвед");
+            dbsn.writeDBSN("Пока медвед");
+            //dbsn.writeDBSN("Проверка");
+            //dbsn.readDBSN("Gleb", 1);
             Console.ReadLine();
         }
     }
