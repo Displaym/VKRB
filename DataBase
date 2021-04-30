@@ -86,9 +86,16 @@ namespace DBSN
         }
 
         //ЧТЕНИЕ ИЗ ТАБЛИЦЫ ДБСН//
-        public void readDBSN()
+        public void readDBSN(string path, int fragm_nom)
         {
-
+            Console.WriteLine("Какой файл прочитать:");
+            string fil_name = Console.ReadLine();
+            fil_name = _way + fil_name;
+            using (StreamReader sr = new StreamReader(fil_name + ".dbs"))
+            {
+                Console.WriteLine("Содержимое файла " + fil_name + ".dbs" + " : ");
+                Console.WriteLine(sr.ReadToEnd());
+            }
         }
 
         //ЧТЕНИЕ В РЕАЛЬНОМ ВРЕМЕНИ//
