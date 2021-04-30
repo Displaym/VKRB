@@ -30,12 +30,14 @@ namespace DBSN
         //    }
         //}
         //СОЗДАНИЕ ТАБЛИЦЫ ДБСН//
-        public void createDBSN(string name)
+        public void createDBSN()
         {
             //var dbs = File.CreateText(_way + name + ".dbs", true);
             //var dbn = File.CreateText(_way + name + ".dbn", true);
             //dbs.Close();
             //dbn.Close();
+            Console.WriteLine("Введите имя файла:");
+            string name = Console.ReadLine();
             using (StreamWriter sw = new StreamWriter(_way + name + ".dbs", true))
             {
                 Console.WriteLine("Файл " + name + ".dbs" + " создан или открыт(в случае ошибочного использования)");
@@ -66,11 +68,17 @@ namespace DBSN
         }
 
         //ЗАПИСЬ В ТАБЛИЦУ ДБСН//
-        public void writeDBSN(string fragm, int fragm_nom)
+        public void writeDBSN(string fragm)
         {
             Console.WriteLine("Какой файл дозаписать:");
             string fil_name = Console.ReadLine();
             fil_name = _way + fil_name;
+            int fragm_nom_int;
+            using (StreamReader sr = new StreamReader(fil_name + ".dbs"))
+            {
+                string fragm_nom = sr.ReadToEnd();
+                fragm_nom_int = (fragm_nom.Length);
+            }
             using (StreamWriter sw = new StreamWriter(fil_name + ".dbs", true, System.Text.Encoding.Default))
             {
                 sw.Write(fragm);
@@ -78,7 +86,7 @@ namespace DBSN
             }
             using (StreamWriter sw = new StreamWriter(fil_name + ".dbn", true, System.Text.Encoding.Default))
             {
-                string BinaryFragm_nom = Convert.ToString(fragm_nom, 2);
+                string BinaryFragm_nom = Convert.ToString(fragm_nom_int, 2);
                 string BinaryFragm_len = Convert.ToString(fragm.Length, 2);
                 sw.WriteLine(BinaryFragm_nom + BinaryFragm_len);
                 Console.WriteLine("Файл " + fil_name + ".dbn" + " дозаписан");
