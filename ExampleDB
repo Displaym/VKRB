@@ -12,10 +12,12 @@ namespace ExampleDBSN
             //dbsn.createDBSN();
             //dbsn.openDBSN();
             //dbsn.closeDBSN();
-            dbsn.writeDBSN("Привет медвед");
-            dbsn.writeDBSN("Пока медвед");
+            //dbsn.writeDBSN("1111");
+            //dbsn.writeDBSN("222222");
+            //dbsn.writeDBSN("333 333");
+            //dbsn.writeDBSN("Привет медведсреда       ");
             //dbsn.writeDBSN("Проверка");
-            //dbsn.readDBSN("Gleb", 1);
+            dbsn.readDBSN();
             Console.ReadLine();
         }
     }
