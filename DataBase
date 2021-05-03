@@ -111,10 +111,12 @@ namespace DBSN
         }
 
         //ЧТЕНИЕ ИЗ ТАБЛИЦЫ ДБСН//
-        public void readDBSN(int fragm_num)
+        public void readDBSN()
         {
-            Console.WriteLine("Какой файл прочитать:");
+            Console.WriteLine("Какой файл прочитать: ");
             string fil_name = Console.ReadLine();
+            Console.WriteLine("Введите номер фрагмента, который хотите прочитать: ");
+            int fragm_num = Convert.ToInt32(Console.ReadLine());
             fil_name = _way + fil_name;
             int fragm_begin;
             int fragm_end;
