@@ -73,36 +73,67 @@ namespace DBSN
             Console.WriteLine("Какой файл дозаписать:");
             string fil_name = Console.ReadLine();
             fil_name = _way + fil_name;
-            int fragm_nom_int;
+            int file_text_lenght;
             using (StreamReader sr = new StreamReader(fil_name + ".dbs"))
             {
-                string fragm_nom = sr.ReadToEnd();
-                fragm_nom_int = (fragm_nom.Length);
+                string file_text = sr.ReadToEnd();
+                file_text_lenght = file_text.Length;
             }
             using (StreamWriter sw = new StreamWriter(fil_name + ".dbs", true, System.Text.Encoding.Default))
             {
                 sw.Write(fragm);
                 Console.WriteLine("Файл " + fil_name + ".dbs" + " дозаписан");
             }
-            using (StreamWriter sw = new StreamWriter(fil_name + ".dbn", true, System.Text.Encoding.Default))
+            //using (StreamWriter sw = new StreamWriter(fil_name + ".dbn", true, System.Text.Encoding.Default))
+            //{
+            //    string BinaryFragm_nom = Convert.ToString(fragm_nom_int, 2);
+            //    string BinaryFragm_len = Convert.ToString(fragm.Length, 2);
+            //    sw.WriteLine(BinaryFragm_nom + BinaryFragm_len);
+            //    Console.WriteLine("Файл " + fil_name + ".dbn" + " дозаписан");
+            //}
+            //using (var fs = File.OpenWrite(fil_name + ".dbn"))
+            //{
+            //    using (var bw = new BinaryWriter(fs))
+            //    {
+            //        bw.Write(fragm_nom_int);
+            //        bw.Write(fragm.Length);
+            //        Console.WriteLine("Файл " + fil_name + ".dbn" + " дозаписан");
+            //    }
+            //}
+            using (FileStream fs = new FileStream(fil_name + ".dbn", FileMode.Append))
             {
-                string BinaryFragm_nom = Convert.ToString(fragm_nom_int, 2);
-                string BinaryFragm_len = Convert.ToString(fragm.Length, 2);
-                sw.WriteLine(BinaryFragm_nom + BinaryFragm_len);
+                byte[] array = BitConverter.GetBytes(file_text_lenght);
+                fs.Write(array, 0, array.Length);
+                byte[] array_2 = BitConverter.GetBytes(fragm.Length);
+                fs.Write(array_2, 0, array_2.Length);
                 Console.WriteLine("Файл " + fil_name + ".dbn" + " дозаписан");
             }
         }
 
         //ЧТЕНИЕ ИЗ ТАБЛИЦЫ ДБСН//
-        public void readDBSN(string path, int fragm_nom)
+        public void readDBSN(int fragm_num)
         {
             Console.WriteLine("Какой файл прочитать:");
             string fil_name = Console.ReadLine();
             fil_name = _way + fil_name;
-            using (StreamReader sr = new StreamReader(fil_name + ".dbs"))
+            int fragm_begin;
+            int fragm_end;
+            using (FileStream fs = File.OpenRead(fil_name + ".dbn"))
             {
-                Console.WriteLine("Содержимое файла " + fil_name + ".dbs" + " : ");
-                Console.WriteLine(sr.ReadToEnd());
+                fs.Seek((8 * (fragm_num - 1)), 0);
+                byte[] array = new byte[4];
+                fs.Read(array, 0, array.Length);
+                fragm_begin = BitConverter.ToInt32(array, 0);
+                fs.Read(array, 0, array.Length);
+                fragm_end = BitConverter.ToInt32(array, 0);
+            }
+            using (FileStream fs = File.OpenRead(fil_name + ".dbs"))
+            {
+                fs.Seek(fragm_begin, 0);
+                byte[] array = new byte[fragm_end];
+                fs.Read(array, 0, array.Length);
+                string text_fragm = Encoding.Default.GetString(array);
+                Console.WriteLine($"Вы читаете {fragm_num} фрагмент из " + fil_name + ".dbs" + " : " + text_fragm);
             }
         }
 
