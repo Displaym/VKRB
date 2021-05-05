@@ -1,0 +1,339 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+namespace DBSN
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Доброго пожаловать в Tesla(Elon Musk)");
+            Console.WriteLine("Введите путь, с которым придется работать");
+            Console.WriteLine("Пример: D:\\Example\\");
+            Console.WriteLine("Ожидание ввода...");
+            string de_way = Console.ReadLine();
+            ClDBSN dbsn = new ClDBSN(de_way);
+            //dbsn.createDBSN();
+            //dbsn.openDBSN();
+            //dbsn.closeDBSN();
+            while (true)
+            {
+                Console.WriteLine("1. Создать базу.");
+                Console.WriteLine("2. Открыть базу.");
+                Console.WriteLine("3. Удалить базу.");
+                Console.WriteLine("0. Выход из программы.");
+                string key = Console.ReadLine();
+                switch (key)
+                {
+                    case "0":
+                        Console.WriteLine("Спасибо за внимание!");
+                        return;
+                    case "1":
+                        dbsn.createDBSN();
+                        break;
+                    case "2":
+                        dbsn.openDBSN();
+                        break;
+                    case "3":
+                        dbsn.deleteDBSN();
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+            /*dbsn.writeDBSN("222222");
+            dbsn.writeDBSN("3333");
+            dbsn.writeDBSN("4");
+            dbsn.writeDBSN("00000");
+            */
+            //dbsn.writeDBSN("222222");
+            //dbsn.writeDBSN("333 333");
+            //dbsn.writeDBSN("Привет медведсреда       ");
+            //dbsn.writeDBSN("Проверка");
+            //dbsn.readDBSN();
+            Console.ReadLine();
+        }
+    }
+
+    public class ClDBSN
+    {
+        static string name;
+        static string _way;
+        static string _fil_dbn;
+        static string _fil_dbs;
+        public FileStream _dbs;
+        public FileStream _dbn;
+        public ClDBSN(string way)
+        {
+            _way = way;
+        }
+
+        public void append_to_file()
+        {
+            Console.WriteLine("Какой файл дозаписать:");
+            string fil_name = Console.ReadLine();
+            fil_name = _way + fil_name;
+            using (StreamWriter sw = new StreamWriter(fil_name, true, System.Text.Encoding.Default))
+            {
+
+            }
+        }
+        //СОЗДАНИЕ ТАБЛИЦЫ ДБСН//
+        public void createDBSN()
+        {
+            //var dbs = File.CreateText(_way + name + ".dbs", true);
+            //var dbn = File.CreateText(_way + name + ".dbn", true);
+            //dbs.Close();
+            //dbn.Close();
+            Console.WriteLine("Введите имя файла:");
+            name = Console.ReadLine();
+            using (StreamWriter sw = new StreamWriter(_way + name + ".dbs", true))
+            {
+                Console.WriteLine("Файл " + name + ".dbs" + " создан или открыт(в случае ошибочного использования)");
+            }
+            using (StreamWriter sw = new StreamWriter(_way + name + ".dbn", true))
+            {
+                Console.WriteLine("Файл " + name + ".dbn" + " создан или открыт(в случае ошибочного использования)");
+            }
+        }
+
+        //ОТКРЫТЬ ТАБЛИЦУ ДБСН//
+        public void openDBSN()
+        {
+            Console.WriteLine("Какой файл открыть:");
+            string fil_name = Console.ReadLine();
+            fil_name = _way + fil_name;
+            _fil_dbs = fil_name + ".dbs";
+            _fil_dbn = fil_name + ".dbn";
+            //_dbs = File.Open(_fil_dbs, FileMode.Append);
+            //Console.WriteLine("Файл " + fil_name + ".dbs" + " открыт");
+            //_dbn = File.Open(_fil_dbn, FileMode.Append);
+            //Console.WriteLine("Файл " + fil_name + ".dbn" + " открыт");
+            Console.WriteLine("Добро пожаловать в базу ###DBSN###");
+            while (true)
+            {
+                Console.WriteLine("1. Записать фрагмент.");
+                Console.WriteLine("2. Прочитать фрагмент.");
+                Console.WriteLine("3. Изменить фрагмент.");
+                Console.WriteLine("4. Удалить фрагмент");
+                Console.WriteLine("5. Прочитать все фрагменты");
+                Console.WriteLine("6. Удалить все фрагменты");
+                Console.WriteLine("0. Выйти из текущей базы");
+                string key = Console.ReadLine();
+                switch (key)
+                {
+                    case "0":
+                        closeDBSN();
+                        return;
+                    case "1":                       
+                        writeDBSN();
+                        break;
+                    case "2":
+                        readDBSN();
+                        break;
+                    case "3":
+                        rewriteFragm();
+                        break;
+                    case "5":
+                        readAllFragm();
+                        break;
+                    case "6":
+                        deleteAllFragm(name);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        //ЗАКРЫТЬ ТАБЛИЦУ ДБСН//
+        public void closeDBSN()
+        {
+            _fil_dbs = "";
+            _fil_dbn = "";
+            Console.WriteLine("Файлы для записи обнулены. Откройте снова базу и выберите новый файл для записи");
+            Console.WriteLine("Спасибо за внимание!");
+            //_dbn.Close();
+            //_dbs.Close();
+        }
+
+        //ЗАПИСЬ В ТАБЛИЦУ ДБСН//
+        public void writeDBSN()
+        {
+            //Console.WriteLine("Какой файл дозаписать:");
+            //string fil_name = Console.ReadLine();
+            //fil_name = _way + fil_name;
+            Console.WriteLine("Ваш текст: ");
+            string fragm = Console.ReadLine();
+            int file_text_lenght;
+            using (StreamReader sr = new StreamReader(_fil_dbs))
+            {
+                string file_text = sr.ReadToEnd();
+                file_text_lenght = file_text.Length;
+            }
+            using (StreamWriter sw = new StreamWriter(_fil_dbs, true, System.Text.Encoding.Default))
+            {
+                sw.Write(fragm);
+                Console.WriteLine("Файл " + _fil_dbs + " дозаписан");
+            }
+            //using (StreamWriter sw = new StreamWriter(fil_name + ".dbn", true, System.Text.Encoding.Default))
+            //{
+            //    string BinaryFragm_nom = Convert.ToString(fragm_nom_int, 2);
+            //    string BinaryFragm_len = Convert.ToString(fragm.Length, 2);
+            //    sw.WriteLine(BinaryFragm_nom + BinaryFragm_len);
+            //    Console.WriteLine("Файл " + fil_name + ".dbn" + " дозаписан");
+            //}
+            //using (var fs = File.OpenWrite(fil_name + ".dbn"))
+            //{
+            //    using (var bw = new BinaryWriter(fs))
+            //    {
+            //        bw.Write(fragm_nom_int);
+            //        bw.Write(fragm.Length);
+            //        Console.WriteLine("Файл " + fil_name + ".dbn" + " дозаписан");
+            //    }
+            //}
+            using (FileStream fs = new FileStream(_fil_dbn, FileMode.Append))
+            {
+                byte[] array = BitConverter.GetBytes(file_text_lenght);
+                fs.Write(array, 0, array.Length);
+                byte[] array_2 = BitConverter.GetBytes(fragm.Length);
+                fs.Write(array_2, 0, array_2.Length);
+                Console.WriteLine("Файл " + _fil_dbn + " дозаписан");
+            }
+        }
+
+        //ЧТЕНИЕ ИЗ ТАБЛИЦЫ ДБСН//
+        public void readDBSN()
+        {
+            Console.WriteLine("Введите номер фрагмента, который хотите прочитать: ");
+            int fragm_num = Convert.ToInt32(Console.ReadLine());
+            int fragm_begin;
+            int fragm_end;
+            using (FileStream fs = File.OpenRead(_fil_dbn))
+            {
+                fs.Seek((8 * (fragm_num - 1)), 0);
+                byte[] array = new byte[4];
+                fs.Read(array, 0, array.Length);
+                fragm_begin = BitConverter.ToInt32(array, 0);
+                fs.Read(array, 0, array.Length);
+                fragm_end = BitConverter.ToInt32(array, 0);
+            }
+            using (FileStream fs = File.OpenRead(_fil_dbs))
+            {
+                fs.Seek(fragm_begin, 0);
+                byte[] array = new byte[fragm_end];
+                fs.Read(array, 0, array.Length);
+                string text_fragm = Encoding.Default.GetString(array);
+                Console.WriteLine($"Вы читаете {fragm_num} фрагмент из " + _fil_dbs + " : " + text_fragm);
+            }
+        }
+
+        public void rewriteFragm()
+        {
+            Console.WriteLine("Введите номер переписываемого фрагмента");
+            int fragm_num = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Введите текст переписываемого фрагмента: ");
+            string fragm = Console.ReadLine();
+            int file_text_lenght;
+            using (StreamReader sr = new StreamReader(_fil_dbs))
+            {
+                string file_text = sr.ReadToEnd();
+                file_text_lenght = file_text.Length;
+            }
+            using (StreamWriter sw = new StreamWriter(_fil_dbs, true, System.Text.Encoding.Default))
+            {
+                sw.Write(fragm);
+                Console.WriteLine("В файле " + _fil_dbs + $" перезаписан {fragm_num} фрагмент");
+            }
+            using (FileStream fs = File.OpenWrite(_fil_dbn))
+            {
+                fs.Seek((8 * (fragm_num - 1)), 0);
+                byte[] array = BitConverter.GetBytes(file_text_lenght);
+                fs.Write(array, 0, array.Length);
+                byte[] array_2 = BitConverter.GetBytes(fragm.Length);
+                fs.Write(array_2, 0, array_2.Length);
+                Console.WriteLine("В файле " + _fil_dbn + $" перезаписан {fragm_num} фрагмент");
+            }
+        }
+
+        public void readAllFragm()
+        {
+            using (StreamReader sr = new StreamReader(_fil_dbs))
+            {
+                int fragm_begin;
+                int fragm_end;
+                long file_length = (new FileInfo(_fil_dbn).Length) / 8;
+                for (int i = 1; i <= file_length; i++)
+                {
+                    using (FileStream fs = File.OpenRead(_fil_dbn))
+                    {
+                        fs.Seek((8 * (i - 1)), 0);
+                        byte[] array = new byte[4];
+                        fs.Read(array, 0, array.Length);
+                        fragm_begin = BitConverter.ToInt32(array, 0);
+                        fs.Read(array, 0, array.Length);
+                        fragm_end = BitConverter.ToInt32(array, 0);
+                    }
+                    using (FileStream fs = File.OpenRead(_fil_dbs))
+                    {
+                        fs.Seek(fragm_begin, 0);
+                        byte[] array = new byte[fragm_end];
+                        fs.Read(array, 0, array.Length);
+                        string text_fragm = Encoding.Default.GetString(array);
+                        Console.WriteLine($"{i} фрагмент из " + _fil_dbs + " : " + text_fragm);
+                    }
+                }
+                Console.WriteLine($"Считано {file_length} фрагментов");
+            }
+        }
+
+        public void deleteAllFragm(string f_name)
+        {
+            using (StreamWriter sw = new StreamWriter(_fil_dbs))
+            {
+                Console.WriteLine($"Файл {f_name}.dbs очищен");
+            }
+            using (StreamWriter sw = new StreamWriter(_fil_dbn))
+            {
+                Console.WriteLine($"Файл {f_name}.dbn очищен") ;
+            }
+        }
+
+        public void deleteDBSN()
+        {
+            Console.WriteLine("Введите название базы: ");
+            string del_name = Console.ReadLine();
+            File.Delete(_way + del_name + ".dbs");
+            File.Delete(_way + del_name + ".dbn");
+            Console.WriteLine($"База {del_name} удалена");
+        }
+        //ЧТЕНИЕ В РЕАЛЬНОМ ВРЕМЕНИ//
+        //СМОТРЯЩИЙ ЗА ФАЙЛОМ//
+        //public void realtime_readDBSN()
+        //{
+        //    do
+        //    {
+        //        FileSystemWatcher watcher = new FileSystemWatcher();
+        //        watcher.Path = Path.GetDirectoryName(@"" + _way + _fil_dbn);
+        //        watcher.NotifyFilter = NotifyFilters.Size;
+        //        watcher.Filter = "*.dbn";
+
+        //        watcher.Changed += new FileSystemEventHandler(OnChanged);
+
+        //        watcher.EnableRaisingEvents = true;
+        //    }
+        //    while (Console.Read() != 'q');
+        //}
+
+        ////ОБРАБОТЧИК ИЗМЕНЕНИЙ В ФАЙЛЕ//
+        //public void OnChanged(object sender, FileSystemEventArgs e)
+        //{
+        //    Console.WriteLine("File: {0} {1}", e.FullPath, e.ChangeType.ToString());
+        //}
+    }
+}
